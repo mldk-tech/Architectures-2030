@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סקירה קולית אינטראקטיבית | ארכיטקטורות AI 2030–2035</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Assistant', 'Heebo', 'sans-serif'],
+                        heading: ['Heebo', 'sans-serif'],
+                    },
+                    colors: {
+                        sand: {
+                            50: '#FAF8F5',
+                            100: '#F4EFE6',
+                            200: '#E7DDD0',
+                            300: '#D5C4B0',
+                            800: '#4A3E31',
+                            900: '#2C231A',
+                        },
+                        slate: {
+                            850: '#151E2E',
+                            900: '#0F172A',
+                        },
+                        teal: {
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                        },
+                        amber: {
+                            500: '#F59E0B',
+                            600: '#D97706',
+                            700: '#B45309',
+                        },
+                        indigo: {
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0D9488;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .active-transcript-line {
+            background-color: rgba(13, 148, 136, 0.12);
+            border-right: 4px solid #0D9488;
+            font-weight: 600;
+        }
+    </style>
+
+    <!-- Chosen Palette: Warm Sand & Slate Deep-Tech (Background: #FAF8F5, Primary Text: #0F172A, Accents: Teal #0D9488, Amber #D97706, Indigo #4F46E5) -->
+    <!-- Application Structure Plan:
+         Designed around an Audio Overview Podcast Experience:
+         1. Sticky Audio Deck Header & Player with playback state, audio waveform canvas, dual-host avatars, speed controls, and interactive scrub bar.
+         2. Interactive Synchronized Transcript Panel: Auto-scrolls during playback, filterable by speaker/chapter, clickable timestamps.
+         3. Dynamic Executive Summary Dashboard (4 core metrics with live updates).
+         4. Five Deep Dive Interactive Acts (Speedata APU Calculator, JEPA vs Autoregressive Visualizer, BitNet 1.58-bit Memory Estimator, CEGAR Safety Shield Interactive Pipeline, Q-Capsule Chart.js Variance Visualizer).
+         5. Comprehensive 2026-2030-2035 Interactive Technology Matrix with search and filter controls.
+         This architecture balances passive audio listening with active hands-on technical exploration. -->
+    <!-- Visualization & Content Choices:
+         1. Audio Waveform Display -> HTML5 Canvas API generating dynamic frequency bars synchronized with audio playback.
+         2. Speech Output -> Web Speech API (speechSynthesis) reading Hebrew dialogue with fallbacks.
+         3. APU Speedup Chart (Chart.js Bar) -> Comparing Speedata APU vs GPU vs CPU for SQL/ETL execution times.
+         4. BitNet 1.58-Bit RAM Estimator -> Interactive Vanilla JS slider demonstrating 90% memory savings on Edge hardware.
+         5. Q-Capsule Gradient Variance Chart (Chart.js Line) -> Illustrating how Q-Capsule bounds variance avoiding Barren Plateaus.
+         6. JEPA vs Pixel Autoregressive Sandbox -> HTML/CSS Interactive comparison sliders showing Latent vs Surface prediction.
+         Confirmation: NO SVG graphics used. NO Mermaid JS used. All visuals rely on CSS shapes, HTML elements, Unicode symbols, and Canvas. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-sand-50 text-slate-800 font-sans antialiased selection:bg-teal-600 selection:text-white pb-24">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-sand-50/90 border-b border-sand-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-slate-900 text-teal-400 font-black flex items-center justify-center text-lg shadow-inner">
+                    🎙️
+                </div>
+                <div>
+                    <h1 class="font-heading font-extrabold text-base md:text-lg text-slate-900 leading-tight">
+                        Audio Overview <span class="text-teal-600">ארכיטקטורות 2030</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-500 font-medium">סקירה קולית ומחקר עומק אינטראקטיבי</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Nav -->
+            <nav class="hidden md:flex items-center gap-1 text-xs font-semibold text-slate-700">
+                <a href="#audio-section" class="px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 font-bold border border-teal-200">🎧 נגן פודקאסט</a>
+                <a href="#act-apu" class="px-2.5 py-1.5 rounded-lg hover:bg-sand-100 transition">1. APU & פוטוניקה</a>
+                <a href="#act-jepa" class="px-2.5 py-1.5 rounded-lg hover:bg-sand-100 transition">2. JEPA & עולם</a>
+                <a href="#act-bitnet" class="px-2.5 py-1.5 rounded-lg hover:bg-sand-100 transition">3. Air-Gap & BitNet</a>
+                <a href="#act-cegar" class="px-2.5 py-1.5 rounded-lg hover:bg-sand-100 transition">4. אימות פורמלי</a>
+                <a href="#act-quantum" class="px-2.5 py-1.5 rounded-lg hover:bg-sand-100 transition">5. קוונטום & BCI</a>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <span id="audio-status-pill" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-700">
+                    <span class="w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
+                    <span id="status-text">מוכן להפעלה</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-10">
+
+        <!-- Executive Intro Section -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold mb-3 border border-teal-500/30">
+                    <span>⚡ תודרך קולית אינטראקטיבית</span>
+                    <span>•</span>
+                    <span>מבוסס על דוח המחקר הארכיטקטורי</span>
+                </div>
+                <h2 class="font-heading font-black text-2xl sm:text-3xl md:text-4xl leading-tight mb-4 text-white">
+                    פודקאסט מנהלים: מהתשתית השקופה של 2026 אל סימביוזה נוירו-קוונטית
+                </h2>
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
+                    האזינו לדיון מעמיק בין <strong class="text-teal-400">אלכס</strong> (ארכיטקט מערכות) ו<strong class="text-amber-400">מיה</strong> (אנליסטית תחרותית), או חקרו ישירות את הסימולטורים והגרפים האינטראקטיביים למטה. הסקירה מנתחת את נפילת מונופול ה-GPU, מודלי עולם סמויים (JEPA), מודלי 1.58-ביט טרנריים בקצה, ומגני אימות פורמלי מתמטיים.
+                </p>
+
+                <!-- Audio Metric Highlights -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    <div class="bg-white/10 backdrop-blur rounded-2xl p-3 border border-white/10">
+                        <div class="text-xs text-slate-400 font-medium">האצת SQL ב-APU</div>
+                        <div class="text-xl sm:text-2xl font-black text-teal-300 font-heading">x259.2</div>
+                        <div class="text-[10px] text-slate-300">Speedata C200 מול GPU</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur rounded-2xl p-3 border border-white/10">
+                        <div class="text-xs text-slate-400 font-medium">חיסכון זיכרון BitNet</div>
+                        <div class="text-xl sm:text-2xl font-black text-amber-300 font-heading">90%</div>
+                        <div class="text-[10px] text-slate-300">1.58-Bit vs FP16</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur rounded-2xl p-3 border border-white/10">
+                        <div class="text-xs text-slate-400 font-medium">הפחתת צריכת CPO</div>
+                        <div class="text-xl sm:text-2xl font-black text-teal-300 font-heading">30W ➔ 9W</div>
+                        <div class="text-[10px] text-slate-300">אופטיקה ארוזה במשותף</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur rounded-2xl p-3 border border-white/10">
+                        <div class="text-xs text-slate-400 font-medium">נאמנות מצבי קסם</div>
+                        <div class="text-xl sm:text-2xl font-black text-indigo-300 font-heading">99.99%</div>
+                        <div class="text-[10px] text-slate-300">Google Willow FTQC</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio Overview Section (Player + Interactive Transcript) -->
+        <section id="audio-section" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Deck: Audio Player Control Deck (5 cols) -->
+            <div class="lg:col-span-5 bg-white p-5 sm:p-6 rounded-3xl border border-sand-200 shadow-sm sticky top-20">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🎙️</span>
+                        <div>
+                            <h3 class="font-heading font-extrabold text-base text-slate-900">נגן סקירה קולית (Audio Overview)</h3>
+                            <p class="text-xs text-slate-500">משך כולל: 10:30 דקות • 5 פרקים</p>
+                        </div>
+                    </div>
+                    <button id="tts-toggle-btn" class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 text-xs font-bold border border-teal-200 hover:bg-teal-100 transition" title="הפעל הקראה קולית אמיתית של הדפדפן">
+                        🔊 דיבור קולי: פעיל
+                    </button>
+                </div>
+
+                <!-- Dual Host Profile Cards -->
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div class="bg-sand-50 p-3 rounded-2xl border border-sand-200 flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-teal-600 text-white font-black flex items-center justify-center text-sm shadow">
+                            א
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="font-bold text-xs text-slate-900 truncate">אלכס</div>
+                            <div class="text-[10px] text-slate-500 truncate">ארכיטקט תשתיות AI</div>
+                        </div>
+                    </div>
+                    <div class="bg-sand-50 p-3 rounded-2xl border border-sand-200 flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-amber-600 text-white font-black flex items-center justify-center text-sm shadow">
+                            מ
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="font-bold text-xs text-slate-900 truncate">מיה</div>
+                            <div class="text-[10px] text-slate-500 truncate">אנליסטית מחקר תחרותי</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animated Frequency Waveform Canvas -->
+                <div class="bg-slate-900 rounded-2xl p-3 mb-4 shadow-inner relative">
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                        <span id="current-chapter-title">פרק 1: הפרדוקס התרמודינמי</span>
+                        <span id="canvas-status">מוכן</span>
+                    </div>
+                    <canvas id="waveformCanvas" class="w-full h-16 rounded-lg block"></canvas>
+                </div>
+
+                <!-- Timeline Scrub Bar -->
+                <div class="space-y-1 mb-4">
+                    <div class="flex justify-between text-xs font-semibold text-slate-600 font-mono">
+                        <span id="time-current">00:00</span>
+                        <span id="time-total">10:30</span>
+                    </div>
+                    <input type="range" id="seek-slider" min="0" max="630" value="0" step="1" 
+                           class="w-full h-2 bg-sand-200 rounded-lg appearance-none cursor-pointer accent-teal-600">
+                </div>
+
+                <!-- Player Main Controls -->
+                <div class="flex items-center justify-between gap-2 mb-5">
+                    <button id="btn-skip-back" class="p-2.5 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-700 text-sm font-bold transition">
+                        ⏪ 10-
+                    </button>
+                    <button id="btn-play" class="flex-1 py-3 px-4 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-extrabold text-base shadow-lg hover:shadow-teal-600/30 transition flex items-center justify-center gap-2">
+                        <span id="play-icon">▶</span>
+                        <span id="play-text">הפעל סקירה קולית</span>
+                    </button>
+                    <button id="btn-skip-fwd" class="p-2.5 rounded-xl bg-sand-100 hover:bg-sand-200 text-slate-700 text-sm font-bold transition">
+                        +10 ⏩
+                    </button>
+                    <select id="speed-select" class="p-2.5 rounded-xl bg-sand-100 border border-sand-200 text-slate-800 text-xs font-bold cursor-pointer">
+                        <option value="1">1.0x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2.0x</option>
+                    </select>
+                </div>
+
+                <!-- Chapter Shortcut Selector -->
+                <div class="border-t border-sand-200 pt-4">
+                    <label class="block text-xs font-bold text-slate-500 mb-2">דילוג מהיר לפי פרקי מחקר:</label>
+                    <div class="space-y-1.5 text-xs">
+                        <button onclick="seekToTime(0)" class="w-full text-right p-2 rounded-xl hover:bg-sand-100 text-slate-700 font-semibold flex justify-between items-center transition">
+                            <span>1. התרמודינמיקה & Speedata APU</span>
+                            <span class="font-mono text-slate-400 text-[11px]">00:00</span>
+                        </button>
+                        <button onclick="seekToTime(135)" class="w-full text-right p-2 rounded-xl hover:bg-sand-100 text-slate-700 font-semibold flex justify-between items-center transition">
+                            <span>2. JEPA & מודלי עולם במרחב הסמוי</span>
+                            <span class="font-mono text-slate-400 text-[11px]">02:15</span>
+                        </button>
+                        <button onclick="seekToTime(285)" class="w-full text-right p-2 rounded-xl hover:bg-sand-100 text-slate-700 font-semibold flex justify-between items-center transition">
+                            <span>3. Air-Gap & מודלי BitNet 1.58-bit</span>
+                            <span class="font-mono text-slate-400 text-[11px]">04:45</span>
+                        </button>
+                        <button onclick="seekToTime(405)" class="w-full text-right p-2 rounded-xl hover:bg-sand-100 text-slate-700 font-semibold flex justify-between items-center transition">
+                            <span>4. אימות פורמלי וכלוב ה-CEGAR</span>
+                            <span class="font-mono text-slate-400 text-[11px]">06:45</span>
+                        </button>
+                        <button onclick="seekToTime(510)" class="w-full text-right p-2 rounded-xl hover:bg-sand-100 text-slate-700 font-semibold flex justify-between items-center transition">
+                            <span>5. קואופרציה קוונטית & BCI</span>
+                            <span class="font-mono text-slate-400 text-[11px]">08:30</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Deck: Interactive Synchronized Transcript Panel (7 cols) -->
+            <div class="lg:col-span-7 bg-white p-5 sm:p-6 rounded-3xl border border-sand-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4 border-b border-sand-200 pb-3">
+                    <div>
+                        <h3 class="font-heading font-extrabold text-base text-slate-900">תמלול מסונכרן בזמן אמת</h3>
+                        <p class="text-xs text-slate-500">לחץ על כל שורה בתמלול כדי לדלג ישירות לנקודה המבוקשת</p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="filterTranscript('all')" id="filter-all" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-600 text-white">הכול</button>
+                        <button onclick="filterTranscript('alex')" id="filter-alex" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-sand-100 text-slate-700 hover:bg-sand-200">אלכס</button>
+                        <button onclick="filterTranscript('maya')" id="filter-maya" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-sand-100 text-slate-700 hover:bg-sand-200">מיה</button>
+                    </div>
+                </div>
+
+                <!-- Transcript Scroll Area -->
+                <div id="transcript-container" class="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+                    <!-- Dynamic Transcript Items generated via JS -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Dynamic Section Introduction -->
+        <div class="bg-sand-100/80 rounded-2xl p-4 border border-sand-200">
+            <h3 class="font-heading font-bold text-sm text-slate-900 mb-1">💡 כיצד לחקור את ממצאי המחקר?</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                הפרקים שלמטה מעמיקים בנושאים שנידונו בסקירה הקולית. תוכל להשתמש במחשבונים האינטראקטיביים, להשוות ביצועים בגרפים הדינמיים, ולהריץ סימולציות ארכיטקטוניות בזמן אמת.
+            </p>
+        </div>
+
+        <!-- ACT 1: Thermodynamics, CPO & Speedata APU -->
+        <section id="act-apu" class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sand-200 pb-4">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-md bg-teal-100 text-teal-800 text-xs font-bold mb-1">מערכה ראשונה</div>
+                    <h3 class="font-heading font-extrabold text-xl text-slate-900">הפרדוקס התרמודינמי, אופטיקה CPO והאצת APU</h3>
+                </div>
+                <p class="text-xs text-slate-500 max-w-md">
+                    כאשר קיר הנחושת והזיכרון חוסם את ה-GPU, התעשייה עוברת לאופטיקה ארוזה במשותף (CPO) ולסיליקון צינורי ייעודי לעומסי SQL ו-ETL.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <!-- Interactive Benchmark Chart (7 cols) -->
+                <div class="lg:col-span-7 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-heading font-bold text-sm text-slate-800">השוואת זמני עיבוד שאילתות SQL (מבוסס TPC-H & SIGMOD 2026 CoddSpeed)</h4>
+                        <span class="text-[11px] text-teal-700 font-bold bg-teal-50 px-2 py-0.5 rounded">נמוך יותר = מהיר יותר</span>
+                    </div>
+                    <div class="chart-container bg-sand-50 p-3 rounded-2xl border border-sand-200">
+                        <canvas id="apuChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Explanation & Speedata Impact Box (5 cols) -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-sand-50 p-4 rounded-2xl border border-sand-200 space-y-2">
+                        <div class="text-xs font-bold text-teal-700">תובנת מפתח מהפודקאסט:</div>
+                        <h5 class="font-heading font-extrabold text-base text-slate-900">למה GPU נרעב לנתונים?</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            מאיצי GPU נבנו לכפל מטריצות צפוף, אך סוכני AI מבלים 70% מזמנם בניקוי נתונים, שאילתות SQL ו-ETL. מעבד ה-Speedata C200 APU הישראלי מריץ שאילתות ישירות בצינור חומרה של מאות שלבים בקצב של מעל מיליארד שורות בשנייה, ומקצר עבודות עיבוד מ-90 שעות ל-8 שעות בלבד.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="p-3 rounded-2xl bg-teal-50 border border-teal-200">
+                            <div class="text-xs text-teal-700 font-semibold">שיפור ביצועים/דולר</div>
+                            <div class="text-xl font-extrabold text-teal-900 font-heading">פי 52</div>
+                            <div class="text-[10px] text-teal-600">מול אשכול GPU מקביל</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+                            <div class="text-xs text-amber-700 font-semibold">חיסכון ב-TCO</div>
+                            <div class="text-xl font-extrabold text-amber-900 font-heading">90%</div>
+                            <div class="text-[10px] text-amber-600">צמצום מ-37 ל-3 שרתים</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACT 2: World Models & JEPA Architecture -->
+        <section id="act-jepa" class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sand-200 pb-4">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-xs font-bold mb-1">מערכה שנייה</div>
+                    <h3 class="font-heading font-extrabold text-xl text-slate-900">מודלי עולם וארכיטקטורת JEPA במרחב הסמוי</h3>
+                </div>
+                <p class="text-xs text-slate-500 max-w-md">
+                    נטישת החיזוי האוטו-רגרסיבי ברמת הפיקסל לטובת חיזוי דינמיקה פיזיקלית ישירות במרחב הייצוג הסמוי.
+                </p>
+            </div>
+
+            <!-- Interactive JEPA Sandbox Simulation -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Autoregressive Pixel Model (Bad) -->
+                <div class="bg-sand-50 p-5 rounded-2xl border border-sand-200 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">גישה קלאסית: אוטו-רגרסיבית</span>
+                        <span class="text-xs font-mono text-slate-500">P(x_t+1 | x_1..t)</span>
+                    </div>
+                    <h4 class="font-heading font-bold text-sm text-slate-900">חיזוי ברמת הפיקסל / טוקן</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        מודל וידאו קלאסי מבזבז כוח חישוב אדיר על ניסיון לצייר מחדש את השתקפות האור, העלים ברקע והטקסטורה הפיקסלית.
+                    </p>
+
+                    <!-- Interactive Slider: Pixel Noise -->
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-slate-600">
+                            <span>רמת רעש רקע בפיקסלים:</span>
+                            <span id="pixel-noise-val" class="font-bold text-red-600">85%</span>
+                        </div>
+                        <input type="range" id="pixel-slider" min="10" max="100" value="85" 
+                               oninput="updateJepaSim()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-red-600">
+                    </div>
+
+                    <div id="pixel-output-box" class="p-3 bg-white rounded-xl border border-red-200 text-xs text-slate-700">
+                        ⚠️ עומס חישוב גבוה: מיליארדי חישובים מבוזבזים על חיזוי רעש סטוכסטי חסר חשיבות פיזיקלית.
+                    </div>
+                </div>
+
+                <!-- JEPA Latent Space Model (Good) -->
+                <div class="bg-teal-50/60 p-5 rounded-2xl border border-teal-200 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-teal-700 bg-teal-100 px-2 py-0.5 rounded">ארכיטקטורת 2030: V-JEPA 2.1</span>
+                        <span class="text-xs font-mono text-teal-800">s_y = g(E(x), z)</span>
+                    </div>
+                    <h4 class="font-heading font-bold text-sm text-slate-900">חיזוי במרחב הייצוג הסמוי (Latent Space)</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        JEPA מתעלם לחלוטין מצבע השולחן ומרעשי הפיקסלים; הוא מקודד אך ורק את הגיאומטריה המרחבית, מרכזי המסה והיחסים הסיבתיים.
+                    </p>
+
+                    <!-- Interactive Slider: Latent Efficiency -->
+                    <div class="space-y-1.5 pt-2">
+                        <div class="flex justify-between text-xs text-slate-600">
+                            <span>יעילות חיזוי במרחב הסמוי:</span>
+                            <span id="jepa-eff-val" class="font-bold text-teal-700">94%</span>
+                        </div>
+                        <div class="w-full bg-teal-200 h-2 rounded-lg overflow-hidden">
+                            <div id="jepa-bar" class="bg-teal-600 h-full w-[94%] transition-all"></div>
+                        </div>
+                    </div>
+
+                    <div id="jepa-output-box" class="p-3 bg-white rounded-xl border border-teal-300 text-xs text-teal-900 font-semibold">
+                        ✅ זינוק של 20% בשיעור ההצלחה של אחיזה רובוטית וניווט פיזיקל.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACT 3: Air-Gap, Sovereignty & BitNet 1.58-Bit Calculator -->
+        <section id="act-bitnet" class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sand-200 pb-4">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-xs font-bold mb-1">מערכה שלישית</div>
+                    <h3 class="font-heading font-extrabold text-xl text-slate-900">ריבונות מידע, Air-Gap ומחשבון BitNet 1.58-Bit</h3>
+                </div>
+                <p class="text-xs text-slate-500 max-w-md">
+                    החלפת כפל נקודה צפה בחיבור שלמים מביאה מודלי 100B פרמטרים למעבד CPU בודד בקצה הטקטי.
+                </p>
+            </div>
+
+            <!-- BitNet RAM & Energy Estimator -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="lg:col-span-6 bg-sand-50 p-5 rounded-2xl border border-sand-200 space-y-4">
+                    <h4 class="font-heading font-bold text-sm text-slate-900">🧮 מחשבון משאבי חומרה: FP16 מול BitNet 1.58-Bit</h4>
+                    <p class="text-xs text-slate-600">
+                        בחר גודל מודל כדי לראות את הקפיצה הדרמטית בדרישות הזיכרון (VRAM/RAM) ובצריכת האנרגיה:
+                    </p>
+
+                    <!-- Model Size Selector Buttons -->
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="calcBitNet(2)" id="btn-m-2" class="py-2 rounded-xl text-xs font-bold bg-sand-200 text-slate-800 hover:bg-teal-600 hover:text-white transition">2B</button>
+                        <button onclick="calcBitNet(14)" id="btn-m-14" class="py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition shadow">14B</button>
+                        <button onclick="calcBitNet(70)" id="btn-m-70" class="py-2 rounded-xl text-xs font-bold bg-sand-200 text-slate-800 hover:bg-teal-600 hover:text-white transition">70B</button>
+                        <button onclick="calcBitNet(100)" id="btn-m-100" class="py-2 rounded-xl text-xs font-bold bg-sand-200 text-slate-800 hover:bg-teal-600 hover:text-white transition">100B</button>
+                    </div>
+
+                    <!-- Comparison Results -->
+                    <div class="space-y-2 pt-2">
+                        <div class="flex justify-between items-center text-xs p-2.5 rounded-xl bg-white border border-sand-200">
+                            <span class="text-slate-600">זיכרון נדרש ב-FP16 קלאסי:</span>
+                            <span id="ram-fp16" class="font-bold font-mono text-slate-900">28.0 GB</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs p-2.5 rounded-xl bg-teal-50 border border-teal-200">
+                            <span class="text-teal-800 font-semibold">זיכרון נדרש ב-BitNet b1.58:</span>
+                            <span id="ram-bitnet" class="font-bold font-mono text-teal-700">2.8 GB (חיסכון 90%)</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs p-2.5 rounded-xl bg-amber-50 border border-amber-200">
+                            <span class="text-amber-800 font-semibold">חומרת יעד רלוונטית:</span>
+                            <span id="hardware-target" class="font-bold text-amber-900">מחשב נייד / מעבד Edge טקטי</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div class="lg:col-span-6 space-y-3 text-xs leading-relaxed text-slate-600">
+                    <div class="p-4 bg-slate-900 text-white rounded-2xl space-y-2">
+                        <div class="text-xs text-teal-400 font-bold">הנוסחה המתמטית של BitNet:</div>
+                        <div class="font-mono text-sm text-center py-2 bg-slate-800 rounded-lg text-amber-300">
+                            W_{i,j} ∈ {-1, 0, +1} &nbsp;➔&nbsp; log₂(3) ≈ 1.58 Bits
+                        </div>
+                        <p class="text-slate-300 text-[11px]">
+                            פעולת הכפל המורכבת נעלמת לחלוטין מגלגלי החישוב ומוחלפת בחיבור/חיסור מספרים שלמים בלבד. מנוע <code class="text-teal-300 font-mono">bitnet.cpp</code> מאפשר להריץ מודלים ללא כרטיסים גרפיים בחתימת חום מזערית המתאימה לרחפנים ומערכות מנותקות רשת.
+                        </p>
+                    </div>
+
+                    <div class="p-3 bg-sand-50 rounded-xl border border-sand-200">
+                        <strong class="text-slate-800">הגנת Air-Gap הרמטית (F5 AI Guardrails):</strong>
+                        בתוך בונקרים מנותקים, מערכות אבטחה אוטונומיות מציבות צוות אדום דינמי המזריק חיסונים נגד פריצות Prompt Injection ללא תלות בענן.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACT 4: Formal Verification & CEGAR Safety Shield -->
+        <section id="act-cegar" class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sand-200 pb-4">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-md bg-teal-100 text-teal-800 text-xs font-bold mb-1">מערכה רביעית</div>
+                    <h3 class="font-heading font-extrabold text-xl text-slate-900">אימות פורמלי ומגני זמן-ריצה (VDTA Runtime Shields)</h3>
+                </div>
+                <p class="text-xs text-slate-500 max-w-md">
+                    כאשר סוכן מנהל כור תעשייתי או לוויין, מתמטיקה דטרמיניסטית בודקת ואוכפת בטיחות במילי-שניות.
+                </p>
+            </div>
+
+            <!-- Interactive CEGAR Step-by-Step Flowchart -->
+            <div class="space-y-3">
+                <h4 class="font-heading font-bold text-sm text-slate-800">זרימת עבודה: מניעת תקלות בסוכנים אוטונומיים בזמן ריצה</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center text-xs">
+                    
+                    <div onclick="setCEGARStep(1)" id="cegar-step-1" class="p-4 rounded-2xl bg-teal-600 text-white font-semibold cursor-pointer border-2 border-teal-600 transition shadow">
+                        <div class="text-[10px] text-teal-200 mb-1">שלב 1</div>
+                        <div class="font-bold text-sm">Auto-Formalization</div>
+                        <div class="text-[11px] mt-1 opacity-90">ניסוח דרישות בשפת LTL/FRET</div>
+                    </div>
+
+                    <div onclick="setCEGARStep(2)" id="cegar-step-2" class="p-4 rounded-2xl bg-sand-100 text-slate-700 font-semibold cursor-pointer border-2 border-transparent hover:border-teal-500 transition">
+                        <div class="text-[10px] text-slate-400 mb-1">שלב 2</div>
+                        <div class="font-bold text-sm">SMT / Rational CEGAR</div>
+                        <div class="text-[11px] mt-1 opacity-90">הוכחה מתמטית מעל רשת QNN</div>
+                    </div>
+
+                    <div onclick="setCEGARStep(3)" id="cegar-step-3" class="p-4 rounded-2xl bg-sand-100 text-slate-700 font-semibold cursor-pointer border-2 border-transparent hover:border-teal-500 transition">
+                        <div class="text-[10px] text-slate-400 mb-1">שלב 3</div>
+                        <div class="font-bold text-sm">VDTA Runtime Shield</div>
+                        <div class="text-[11px] mt-1 opacity-90">ניטור אוטומטי במילי-שניות</div>
+                    </div>
+
+                    <div onclick="setCEGARStep(4)" id="cegar-step-4" class="p-4 rounded-2xl bg-sand-100 text-slate-700 font-semibold cursor-pointer border-2 border-transparent hover:border-teal-500 transition">
+                        <div class="text-[10px] text-slate-400 mb-1">שלב 4</div>
+                        <div class="font-bold text-sm">בלימת אסון פיזי</div>
+                        <div class="text-[11px] mt-1 opacity-90">חסימת פקודה מסוכנת מראש</div>
+                    </div>
+
+                </div>
+
+                <!-- Step Description Display -->
+                <div id="cegar-desc-card" class="p-4 rounded-2xl bg-sand-50 border border-sand-200 text-xs leading-relaxed text-slate-700">
+                    <strong class="text-teal-700 text-sm block mb-1">שלב 1: Auto-Formalization בשפות LTL & FRET</strong>
+                    מודלי שפה משולבים עם מוכיחי משפטים (כגון Lean Copilot ו-Dafny) ומתרגמים הוראות בטיחות בשפה טבעית לנוסחאות לוגיות מחייבות.
+                </div>
+            </div>
+        </section>
+
+        <!-- ACT 5: Neuro-Quantum Symbiosis & Q-Capsule Barren Plateau Chart -->
+        <section id="act-quantum" class="bg-white p-6 rounded-3xl border border-sand-200 shadow-sm space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sand-200 pb-4">
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-xs font-bold mb-1">מערכה חמישית</div>
+                    <h3 class="font-heading font-extrabold text-xl text-slate-900">ממשקי מוח-מחשב (BCI) ופתרון המישורים העקרים בקוונטום</h3>
+                </div>
+                <p class="text-xs text-slate-500 max-w-md">
+                    ממיזוג יריעות עצביות ב-T-PHATE ועד לארכיטקטורת Q-Capsule התוחמת את שונות הגרדיאנט במעגלים קוונטיים.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <!-- Q-Capsule Chart.js Line Chart (7 cols) -->
+                <div class="lg:col-span-7 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-heading font-bold text-sm text-slate-800">שונות גרדיאנט כפונקציה של מספר קיוביטים (Barren Plateau Mitigation)</h4>
+                    </div>
+                    <div class="chart-container bg-sand-50 p-3 rounded-2xl border border-sand-200">
+                        <canvas id="quantumChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- BCI & Quantum Explanation (5 cols) -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-200 space-y-2">
+                        <div class="text-xs font-bold text-indigo-700">BCI: Neural-Latent Symbiosis</div>
+                        <h5 class="font-heading font-extrabold text-base text-slate-900">מעבר מטקסט לגשר יריעות ישיר</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            במקום לתרגם גלי מוח לאותיות טקסט, אלגוריתם <code class="text-indigo-700 font-bold">T-PHATE</code> ושכבות <code class="text-indigo-700 font-bold">Alignment-in</code> ממפים ישירות את יריעת הפעילות העצבית בקורטקס אל המרחב הסמוי של מודל העולם – ללא תרגום מילולי מתווך.
+                        </p>
+                    </div>
+
+                    <div class="bg-sand-50 p-4 rounded-2xl border border-sand-200 space-y-2">
+                        <div class="text-xs font-bold text-amber-700">פריצת הדרך ב-Q-Capsule:</div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            במקום לשזור את כל הקיוביטים במעגל גלובלי שגורם להעלמות אקספוננציאלית של הגרדיאנטים (Barren Plateaus), ארכיטקטורת **Q-Capsule** מחלקת את האוגר הקוונטי לקפסולות מודולריות ברוחב קבוע, ומשמרת יציבות אופטימיזציה.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Matrix 2026-2035 -->
+        <section id="matrix" class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-heading font-black text-2xl text-white">מטריצת מעבר ארכיטקטונית: 2026 ➔ 2030 ➔ 2035</h3>
+                    <p class="text-xs text-slate-400">סנן או חפש טכנולוגיות כדי לראות את קצב השינוי במחסנית החישוב</p>
+                </div>
+
+                <!-- Matrix Search Input -->
+                <div class="relative min-w-[240px]">
+                    <input type="text" id="matrix-search" oninput="filterMatrix()" placeholder="🔍 חפש טכנולוגיה, שבב או פרוטוקול..." 
+                           class="w-full px-3.5 py-2 rounded-xl bg-slate-800 text-white placeholder-slate-500 border border-slate-700 text-xs focus:outline-none focus:border-teal-400">
+                </div>
+            </div>
+
+            <!-- Responsive Table Container -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead>
+                        <tr class="text-slate-400 border-b border-slate-800 font-bold">
+                            <th class="p-3">ציר טכנולוגי</th>
+                            <th class="p-3 text-teal-400">מציאות 2026 (הווה שקוף)</th>
+                            <th class="p-3 text-amber-400">נקודת פיתול 2030 (עוגן המחקר)</th>
+                            <th class="p-3 text-indigo-400">אופק 2035</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrix-tbody" class="divide-y divide-slate-800 text-slate-300">
+                        <!-- Populated dynamically via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t border-sand-200 bg-sand-100 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <div class="font-bold text-slate-700">מחקר ארכיטקטורות AI 2030–2035 • סקירה קולית ומחקר מערכתי אינטראקטיבי</div>
+            <p>נוצר עבור מובילי טכנולוגיה, ארכיטקטי סיליקון ומנהלי תשתיות אינטליגנציה.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* --- Audio Overview Script & Data --- */
+        const audioTranscript = [
+            {
+                id: 1,
+                time: 0,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'שלום לכולם וברוכים הבאים לסקירה הקולית. מיה, בשנה הזו – 2026 – הבינה המלאכותית הפכה לתשתית שקופה. אבל מאחורי הקלעים, הגענו לקיר פיזיקלי קשיח: ה-GPU זולל חשמל ואינו מסוגל לעמוד בקצב של שאילתות ה-SQL וה-ETL.'
+            },
+            {
+                id: 2,
+                time: 35,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'בדיוק אלכס. כשאנחנו מסתכלים על נתוני SIGMOD 2026, אנחנו רואים שחברות כמו Speedata הישראלית עם מעבד ה-C200 APU משיגות האצה של פי 259 בשאילתות מורכבות לעומת GPU. מדובר בשינוי תפיסתי – הפרדת רשויות מלאה בסיליקון.'
+            },
+            {
+                id: 3,
+                time: 80,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'וגם הפוטוניקה השתנתה. ניסיונות הלוגיקה האופטית קורסים במבחן מילר, אבל האופטיקה הארוזה במשותף – CPO – מורידה את צריכת החשמל בממשק התקשורת מ-30 וואט ל-9 וואט בלבד.'
+            },
+            {
+                id: 4,
+                time: 135,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'נעבור למערכה השנייה: מודלי עולם. למה מודלים אוטו-רגרסיביים של ניחוח פיקסלים קורסים ברובוטיקה?'
+            },
+            {
+                id: 5,
+                time: 175,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'כי הם מבזבזים 90% מהאנרגיה על ניסיון לנבא רעש פיקסלים ברקע. ארכיטקטורת V-JEPA 2.1 של יאן לקון מבצעת את כל החיזוי במרחב הסמוי. הרובוט מבין גיאומטריה ואינרציה במקום לצייר השתקפויות אור.'
+            },
+            {
+                id: 6,
+                time: 235,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'ובגזרת הידע הארגוני, GraphRAG ומערכות כמו AriGraph משלבות זיכרון אפיזודי עם חוקים דטרמיניסטיים מוחלטים כדי למנוע הזיות.'
+            },
+            {
+                id: 7,
+                time: 285,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'מערכה שלישית: הבונקר החכם ו-Air-Gap. בעקבות חוק ה-AI האירופי ותקני CMMC, ארגונים עוברים לריבונות מלאה. אבל הציפורנה האמיתית היא BitNet b1.58.'
+            },
+            {
+                id: 8,
+                time: 340,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'מדהים לחשוב שעל ידי מעבר למשקולות טרנריות של פלוס 1, אפס ומינוס 1, אנחנו מחליפים כפל מטריצות בחיבור שלמים. מודל של 100 מיליארד פרמטרים רץ על מעבד CPU בודד בקצה!'
+            },
+            {
+                id: 9,
+                time: 405,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'במערכה הרביעית, אנחנו מדברים על אימות פורמלי לסוכנים. לא ניתן להפקיר כור גרעיני או לוויין בידי רשת נוירונים ההסתברותית טהורה.'
+            },
+            {
+                id: 10,
+                time: 460,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'נכון, ולכן אנחנו כולאים את הסוכן במגן זמן-ריצה – VDTA Shield – המבוסס על הוכחות SMT ו-CEGAR. אם הסוכן מנסה לחרוג ממעטפת הבטיחות, המגן בולם אותה במילי-שניות.'
+            },
+            {
+                id: 11,
+                time: 510,
+                speaker: 'alex',
+                speakerName: 'אלכס (ארכיטקט)',
+                text: 'ולבסוף, מערכה חמישית: ממשקי מוח-מחשב וקוונטום. אלגוריתם T-PHATE מחבר ישירות את יריעת המוח למרחב הסמוי של AI, ובקוונטום – שבב Willow של גוגל וארכיטקטורת Q-Capsule פותרים את בעיית המישורים העקרים.'
+            },
+            {
+                id: 12,
+                time: 580,
+                speaker: 'maya',
+                speakerName: 'מיה (אנליסטית)',
+                text: 'סיכום מופלא. הסימביוזה של 2030 אינה פנטזיה – היא תוצאה של הנדסה מדויקת, מתמטיקה פורמלית וסיליקון הטרוגני.'
+            }
+        ];
+
+        /* --- Technology Matrix Data --- */
+        const matrixData = [
+            {
+                tech: 'עיבוד SQL/ETL',
+                t2026: 'Speedata C200 APU (האצה x259)',
+                t2030: 'צינורות APU משולבים במארג CPO',
+                t2035: 'עיבוד אנליטי אוטונומי בסיליקון'
+            },
+            {
+                tech: 'ארכיטקטורת מודלים',
+                t2026: 'MoE מולטי-מודאלי, V-JEPA 2.1',
+                t2030: 'H-JEPA היררכי במרחב הסמוי',
+                t2035: 'סימולטורי עולם סיבתיים בזמן אמת'
+            },
+            {
+                tech: 'חישוב בקצה (Edge)',
+                t2026: 'BitNet b1.58, Hailo-10H',
+                t2030: 'מודלי 100B ב-1.58-bit על CPU',
+                t2035: 'נחילי קצה אוטונומיים בחתימת חום 0'
+            },
+            {
+                tech: 'בטיחות סוכנים',
+                t2026: 'F5 Guardrails, צוות אדום',
+                t2030: 'אימות SMT/CEGAR ומגני VDTA',
+                t2035: 'ערבויות בטיחות מתמטיות לאומיות'
+            },
+            {
+                tech: 'מחשוב קוונטי',
+                t2026: 'Google Willow (99.99% נאמנות)',
+                t2030: 'ארכיטקטורת Q-Capsule מודולרית',
+                t2035: 'קו-פרוססורים קוונטיים ב-HPC'
+            }
+        ];
+
+        /* --- App State --- */
+        let currentTime = 0;
+        const totalDuration = 630; // 10:30 mins
+        let isPlaying = false;
+        let playInterval = null;
+        let playbackSpeed = 1.0;
+        let ttsEnabled = true;
+        let activeTranscriptFilter = 'all';
+
+        /* --- Audio Waveform Visualizer (Canvas) --- */
+        const canvas = document.getElementById('waveformCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        function drawWaveform() {
+            if (!ctx || !canvas) return;
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const numBars = 45;
+            const barWidth = (canvas.width / numBars) - 2;
+
+            for (let i = 0; i < numBars; i++) {
+                let barHeight;
+                if (isPlaying) {
+                    // Dynamic animated frequency simulation
+                    barHeight = Math.sin(i * 0.3 + Date.now() * 0.008 * playbackSpeed) * 20 + 25 + Math.random() * 10;
+                } else {
+                    // Static resting wave
+                    barHeight = Math.sin(i * 0.2) * 12 + 18;
+                }
+
+                const x = i * (barWidth + 2);
+                const y = (canvas.height - barHeight) / 2;
+
+                const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
+                if (i % 2 === 0) {
+                    gradient.addColorStop(0, '#0D9488');
+                    gradient.addColorStop(1, '#14B8A6');
+                } else {
+                    gradient.addColorStop(0, '#D97706');
+                    gradient.addColorStop(1, '#F59E0B');
+                }
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.roundRect(x, y, barWidth, barHeight, 3);
+                ctx.fill();
+            }
+            if (isPlaying) {
+                requestAnimationFrame(drawWaveform);
+            }
+        }
+
+        /* --- Audio Player Control Logic --- */
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const btnText = document.getElementById('play-text');
+            const btnIcon = document.getElementById('play-icon');
+            const statusPill = document.getElementById('audio-status-pill');
+            const statusText = document.getElementById('status-text');
+
+            if (isPlaying) {
+                btnText.innerText = 'השהה סקירה קולית';
+                btnIcon.innerText = '⏸';
+                statusPill.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-300";
+                statusText.innerText = "משמיע כעת...";
+
+                playInterval = setInterval(() => {
+                    if (currentTime < totalDuration) {
+                        currentTime += 1 * playbackSpeed;
+                        updatePlayerUI();
+                    } else {
+                        pauseAudio();
+                    }
+                }, 1000);
+
+                drawWaveform();
+                speakCurrentParagraph();
+            } else {
+                pauseAudio();
+            }
+        }
+
+        function pauseAudio() {
+            isPlaying = false;
+            clearInterval(playInterval);
+            document.getElementById('play-text').innerText = 'המשך סקירה קולית';
+            document.getElementById('play-icon').innerText = '▶';
+            const statusPill = document.getElementById('audio-status-pill');
+            statusPill.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-700";
+            document.getElementById('status-text').innerText = "מושהה";
+            
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            drawWaveform();
+        }
+
+        function seekToTime(seconds) {
+            currentTime = seconds;
+            updatePlayerUI();
+            if (isPlaying && ttsEnabled) {
+                speakCurrentParagraph();
+            }
+        }
+
+        function formatTime(secs) {
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function updatePlayerUI() {
+            document.getElementById('time-current').innerText = formatTime(currentTime);
+            document.getElementById('seek-slider').value = currentTime;
+
+            // Find current active transcript item
+            let activeIndex = 0;
+            for (let i = 0; i < audioTranscript.length; i++) {
+                if (currentTime >= audioTranscript[i].time) {
+                    activeIndex = i;
+                }
+            }
+
+            // Highlight transcript line
+            document.querySelectorAll('.transcript-item').forEach((el, idx) => {
+                if (idx === activeIndex) {
+                    el.classList.add('active-transcript-line');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    el.classList.remove('active-transcript-line');
+                }
+            });
+
+            // Update Chapter title display
+            const activeChapter = audioTranscript[activeIndex];
+            if (activeChapter) {
+                document.getElementById('current-chapter-title').innerText = `${activeChapter.speakerName}`;
+            }
+        }
+
+        /* --- Web Speech API (Hebrew TTS Integration) --- */
+        function speakCurrentParagraph() {
+            if (!ttsEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            let activeIndex = 0;
+            for (let i = 0; i < audioTranscript.length; i++) {
+                if (currentTime >= audioTranscript[i].time) {
+                    activeIndex = i;
+                }
+            }
+            const item = audioTranscript[activeIndex];
+            if (!item) return;
+
+            const utterance = new SpeechSynthesisUtterance(item.text);
+            utterance.lang = 'he-IL';
+            utterance.rate = playbackSpeed;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        /* --- Render Transcript --- */
+        function renderTranscript() {
+            const container = document.getElementById('transcript-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            audioTranscript.forEach((item, index) => {
+                if (activeTranscriptFilter !== 'all' && item.speaker !== activeTranscriptFilter) {
+                    return;
+                }
+
+                const div = document.createElement('div');
+                div.className = `transcript-item p-3.5 rounded-2xl cursor-pointer hover:bg-sand-100 transition border border-transparent ${index === 0 ? 'active-transcript-line' : ''}`;
+                div.onclick = () => seekToTime(item.time);
+
+                const isAlex = item.speaker === 'alex';
+                const badgeBg = isAlex ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800';
+
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-1 text-xs">
+                        <span class="px-2 py-0.5 rounded-md font-bold ${badgeBg}">${item.speakerName}</span>
+                        <span class="font-mono text-slate-400 text-[11px]">${formatTime(item.time)}</span>
+                    </div>
+                    <p class="text-xs text-slate-700 leading-relaxed">${item.text}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function filterTranscript(speaker) {
+            activeTranscriptFilter = speaker;
+            document.getElementById('filter-all').className = speaker === 'all' ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-600 text-white' : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-sand-100 text-slate-700 hover:bg-sand-200';
+            document.getElementById('filter-alex').className = speaker === 'alex' ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-600 text-white' : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-sand-100 text-slate-700 hover:bg-sand-200';
+            document.getElementById('filter-maya').className = speaker === 'maya' ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-600 text-white' : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-sand-100 text-slate-700 hover:bg-sand-200';
+            renderTranscript();
+        }
+
+        /* --- Interactive BitNet Calculator --- */
+        function calcBitNet(params) {
+            const fp16GB = (params * 2.0).toFixed(1);
+            const bitnetGB = (params * 0.2).toFixed(1);
+
+            document.getElementById('ram-fp16').innerText = `${fp16GB} GB`;
+            document.getElementById('ram-bitnet').innerText = `${bitnetGB} GB (חיסכון 90%)`;
+
+            let hw = "מחשב נייד / מעבד Edge טקטי";
+            if (params >= 70) hw = "שרת CPU בודד ללא GPU";
+            if (params === 2) hw = "רחפן טקטי / סמארטפון מוצפן";
+
+            document.getElementById('hardware-target').innerText = hw;
+
+            // Highlight button
+            ['2', '14', '70', '100'].forEach(p => {
+                const btn = document.getElementById(`btn-m-${p}`);
+                if (btn) {
+                    btn.className = p == params ? "py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition shadow" : "py-2 rounded-xl text-xs font-bold bg-sand-200 text-slate-800 hover:bg-teal-600 hover:text-white transition";
+                }
+            });
+        }
+
+        /* --- Interactive JEPA Simulation --- */
+        function updateJepaSim() {
+            const val = document.getElementById('pixel-slider').value;
+            document.getElementById('pixel-noise-val').innerText = `${val}%`;
+            
+            const eff = Math.min(98, Math.max(50, 100 - (val * 0.1)));
+            document.getElementById('jepa-eff-val').innerText = `${eff.toFixed(0)}%`;
+            document.getElementById('jepa-bar').style.width = `${eff}%`;
+        }
+
+        /* --- CEGAR Step Selector --- */
+        function setCEGARStep(step) {
+            const descriptions = {
+                1: '<strong>שלב 1: Auto-Formalization בשפות LTL & FRET</strong><br>מודלי שפה משולבים עם מוכיחי משפטים (כגון Lean Copilot ו-Dafny) ומתרגמים הוראות בטיחות בשפה טבעית לנוסחאות לוגיות מחייבות.',
+                2: '<strong>שלב 2: SMT Solver & Rational CEGAR</strong><br>המערכת מחליפה כל משקולת בייצוג הרציונלי המדויק שלה (Q) ומריצה לולאת בדיקת מודלים לקבלת הוכחה מתמטית מוחלטת.',
+                3: '<strong>שלב 3: VDTA Runtime Shield (ROSMonitoring)</strong><br>אוטומט מתוזמן בדיד פועל כמגן זמן-ריצה, ומנטר כל פקודה קוגניטיבית לפני הגעתה למנועים הפיזיים.',
+                4: '<strong>שלב 4: בלימת אסון פיזי ומעטפת בטיחות</strong><br>כאשר מזוהה חריגה ממעטפת הבטיחות במילי-שניות, המגן בולם את הפעולה ומעביר את המערכת למצב בטוח (Fail-Safe).'
+            };
+
+            document.getElementById('cegar-desc-card').innerHTML = descriptions[step];
+
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`cegar-step-${i}`);
+                if (btn) {
+                    if (i === step) {
+                        btn.className = "p-4 rounded-2xl bg-teal-600 text-white font-semibold cursor-pointer border-2 border-teal-600 transition shadow";
+                    } else {
+                        btn.className = "p-4 rounded-2xl bg-sand-100 text-slate-700 font-semibold cursor-pointer border-2 border-transparent hover:border-teal-500 transition";
+                    }
+                }
+            }
+        }
+
+        /* --- Render Technology Matrix --- */
+        function renderMatrix(dataToRender) {
+            const tbody = document.getElementById('matrix-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            dataToRender.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-white">${row.tech}</td>
+                    <td class="p-3 text-slate-300">${row.t2026}</td>
+                    <td class="p-3 text-amber-300 font-semibold">${row.t2030}</td>
+                    <td class="p-3 text-indigo-300">${row.t2035}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterMatrix() {
+            const query = document.getElementById('matrix-search').value.toLowerCase();
+            const filtered = matrixData.filter(item => 
+                item.tech.toLowerCase().includes(query) ||
+                item.t2026.toLowerCase().includes(query) ||
+                item.t2030.toLowerCase().includes(query) ||
+                item.t2035.toLowerCase().includes(query)
+            );
+            renderMatrix(filtered);
+        }
+
+        /* --- Chart.js Initializations --- */
+        function initCharts() {
+            // Chart 1: Speedata APU Benchmark Chart
+            const ctxApu = document.getElementById('apuChart');
+            if (ctxApu) {
+                new Chart(ctxApu, {
+                    type: 'bar',
+                    data: {
+                        labels: ['TPC-H Q13 (מחרוזות)', 'TPC-H Q16 (הסתעפויות)', 'עומס Spark SQL כולל'],
+                        datasets: [
+                            {
+                                label: 'שרתי CPU מסורתיים',
+                                data: [100, 100, 100],
+                                backgroundColor: '#CBD5E1'
+                            },
+                            {
+                                label: 'מאיצי GPU (Blackwell)',
+                                data: [45, 50, 38],
+                                backgroundColor: '#F59E0B'
+                            },
+                            {
+                                label: 'Speedata C200 APU',
+                                data: [0.38, 1.62, 1.59], // Represents x259.2 and x61.5 speedup (lower time)
+                                backgroundColor: '#0D9488'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Assistant', size: 11 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `${ctx.dataset.label}: ${ctx.raw}% מזמן ברירת המחדל`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'logarithmic',
+                                title: { display: true, text: 'זמן עיבוד יחסי (סולם לוגריתמי - נמוך יותר מוביל)', font: { family: 'Assistant', size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Chart 2: Q-Capsule Barren Plateau Gradient Variance Chart
+            const ctxQuantum = document.getElementById('quantumChart');
+            if (ctxQuantum) {
+                new Chart(ctxQuantum, {
+                    type: 'line',
+                    data: {
+                        labels: ['10 קיוביטים', '30 קיוביטים', '50 קיוביטים', '100 קיוביטים', '200 קיוביטים'],
+                        datasets: [
+                            {
+                                label: 'רשת קוונטית גלובלית (Barren Plateau קלאסי)',
+                                data: [0.1, 0.001, 0.00001, 0.0000001, 0.000000001],
+                                borderColor: '#EF4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'ארכיטקטורת Q-Capsule (תחומה ומודולרית)',
+                                data: [0.1, 0.085, 0.082, 0.079, 0.078],
+                                borderColor: '#0D9488',
+                                backgroundColor: 'rgba(13, 148, 136, 0.15)',
+                                fill: true,
+                                tension: 0.2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Assistant', size: 11 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `${ctx.dataset.label}: שונות Var = ${ctx.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'logarithmic',
+                                title: { display: true, text: 'שונות הגרדיאנט Var(∂L/∂θ) - גבוה יותר = יציב', font: { family: 'Assistant', size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        /* --- Initial Setup on DOM Load --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTranscript();
+            renderMatrix(matrixData);
+            initCharts();
+            drawWaveform();
+
+            // Setup Play / Pause Click Handlers
+            document.getElementById('btn-play').addEventListener('click', togglePlay);
+            document.getElementById('btn-skip-back').addEventListener('click', () => seekToTime(Math.max(0, currentTime - 10)));
+            document.getElementById('btn-skip-fwd').addEventListener('click', () => seekToTime(Math.min(totalDuration, currentTime + 10)));
+
+            document.getElementById('seek-slider').addEventListener('input', (e) => {
+                seekToTime(parseFloat(e.target.value));
+            });
+
+            document.getElementById('speed-select').addEventListener('change', (e) => {
+                playbackSpeed = parseFloat(e.target.value);
+                if (isPlaying && ttsEnabled) {
+                    speakCurrentParagraph();
+                }
+            });
+
+            document.getElementById('tts-toggle-btn').addEventListener('click', () => {
+                ttsEnabled = !ttsEnabled;
+                document.getElementById('tts-toggle-btn').innerText = ttsEnabled ? '🔊 דיבור קולי: פעיל' : '🔇 דיבור קולי: כבוי';
+                if (!ttsEnabled && window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
